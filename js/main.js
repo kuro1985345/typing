@@ -29,14 +29,18 @@
 
   function resetGame() {
     isPlaying = false;
-    words.splice(0, words.length);
-    words.push('red', 'blue', 'pink');
+    // words.splice(0, words.length);
+    // words.push('red', 'blue', 'pink');
+    words = [];
     target.textContent = 'Click to start';
     loc = 0;
     startTime = null;
-    const result = document.getElementById('result');
     result.textContent = '';
-    reset.style.display = 'none';
+    easyBtn.style.display = 'inline-block';
+  normalBtn.style.display = 'inline-block';
+  hardBtn.style.display = 'inline-block';
+    mistakeCount = 0;
+    mistakeDisplay.style.display = 'none';
   }
 
   let words;
