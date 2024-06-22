@@ -1,6 +1,25 @@
 'use strict';
 
 {
+  let timeLimit = 0;
+  let timeRemain = timeLimit;
+  let timerInterval;
+
+  function startTimer(){
+    const timerEL = document.getElementById('remain-time');
+    timerEL.textContent = `残り時間：${timeRemain}秒`;
+
+    timerInterval = setInterval(() => {
+      timeRemain--;
+      timerEL.textContent = `残り時間：${timeRemain}秒`;
+
+      if (timeRemain <= 0){
+        clearInterval(timerInterval);
+        alert("時間切れです！！")
+      }
+    },1000);
+  }
+
   function setWord() {
     word = words.splice(Math.floor(Math.random() * words.length), 1)[0];
     target.textContent = word;
@@ -19,25 +38,72 @@
     reset.style.display = 'none';
   }
 
-  const words = [
-    'red',
-    'blue',
-    'pink',
-  ];
+  let words;
   let word;
   let loc = 0;
   let startTime;
   let isPlaying = false;
   const target = document.getElementById('target');
+  const easyBtn = document.getElementById('easyBtn');
+  const normalBtn = document.getElementById('normalBtn');
+  const hardBtn = document.getElementById('hardBtn');
 
-  target.addEventListener('click', () => {
+
+  const wordLists = {
+    easy: ['red', 'blue', 'pink'],
+    normal: ['apple', 'banana', 'orange'],
+    hard: ['elephant', 'giraffe', 'rhinoceros']
+  };
+
+  function selectDifficulty(difficulty) {
+    if (difficulty === 'easy') {
+      timeLimit = 15;
+    } else if (difficulty === 'normal') {
+      timeLimit = 25;
+    } else if (difficulty === 'hard') {
+      timeLimit = 30;
+    }
+
+    timeRemain = timeLimit;
+    words = wordLists[difficulty];
+    startGame(); 
+  }
+
+  function startGame() {
+    easyBtn.style.display = 'none';
+    normalBtn.style.display = 'none';
+    hardBtn.style.display = 'none';
+
     if (isPlaying === true) {
       return;
     }
-
+  
     isPlaying = true;
-    startTime = Date.now();
-    setWord();
+    let count = 3;
+    const countDown = setInterval(() =>{
+      if (count > 0){
+        target.textContent = count;
+        count--;
+      }
+      else
+      {
+        clearInterval(countDown);
+        startTime = Date.now();
+        setWord();
+        startTimer();
+      }
+    },1000)
+  }
+  document.getElementById('easyBtn').addEventListener('click', () => {
+    selectDifficulty('easy');
+  });
+  
+  document.getElementById('normalBtn').addEventListener('click', () => {
+    selectDifficulty('normal');
+  });
+  
+  document.getElementById('hardBtn').addEventListener('click', () => {
+    selectDifficulty('hard');
   });
 
   document.addEventListener('keydown', e => {
@@ -47,9 +113,6 @@
 
     loc++;
 
-    // 1: _ed
-    // 2: __d
-    // 3: ___
     target.textContent = '_'.repeat(loc) + word.substring(loc);
 
     if (loc === word.length) {
@@ -63,10 +126,8 @@
         reset.addEventListener('click', () => {
           resetGame();
         });
-        
         return;
       }
-
       setWord();
     }
   });
