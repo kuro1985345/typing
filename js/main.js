@@ -7,6 +7,18 @@
     loc = 0;
   }
 
+  function resetGame() {
+    isPlaying = false;
+    words.splice(0, words.length);
+    words.push('red', 'blue', 'pink');
+    target.textContent = 'Click to start';
+    loc = 0;
+    startTime = null;
+    const result = document.getElementById('result');
+    result.textContent = '';
+    reset.style.display = 'none';
+  }
+
   const words = [
     'red',
     'blue',
@@ -18,7 +30,7 @@
   let isPlaying = false;
   const target = document.getElementById('target');
 
-  document.addEventListener('click', () => {
+  target.addEventListener('click', () => {
     if (isPlaying === true) {
       return;
     }
@@ -45,6 +57,13 @@
         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
         const result = document.getElementById('result');
         result.textContent = `Finished! ${elapsedTime} seconds!`;
+        const reset = document.getElementById('reset');
+        reset.textContent = 'Restart';
+        reset.style.display = 'block';
+        reset.addEventListener('click', () => {
+          resetGame();
+        });
+        
         return;
       }
 
