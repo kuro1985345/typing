@@ -35,7 +35,6 @@
     loc = 0;
     eachMistakeCount = 0;
     mistakeDisplay.style.display = 'block';
-
     eachMistakeDisplay.textContent = `この単語の誤入力回数：${eachMistakeCount}`;
     nextCharHint.textContent = ''; // Clear next character hint
     nextCharHint.style.display = 'none';
@@ -136,7 +135,9 @@
         setWord();
         startTimer();
         mistakeDisplay.textContent = `誤入力回数: ${mistakeCount}`; //追加
+        eachMistakeDisplay.textContent = `この単語の誤入力回数: ${eachMistakeCount}`;
         mistakeDisplay.style.display = 'block'; //追加
+        eachMistakeDisplay.style.display = 'block';
       }
     }, 1000);
   }
@@ -154,7 +155,7 @@
   });
 
   document.addEventListener('keydown', e => {
-    if (!isPlaying) {
+    if (!isPlaying || !word) {
       return;
     }
 
@@ -162,11 +163,10 @@
       mistakeCount++; 
       eachMistakeCount++;
       mistakeDisplay.textContent = `誤入力回数: ${mistakeCount}`; 
-      eachMistakeDisplay.textContent = 'この単語の誤入力回数:${eachMistakeCount}';
-      if (mistakeCount > 9) {
+      eachMistakeDisplay.textContent = `この単語の誤入力回数: ${eachMistakeCount}`;
+      if (eachMistakeCount > 9) {
         nextCharHint.textContent = ` ${word[loc]}`;
         nextCharHint.style.display = 'block';
-        mistakeCount = 0;
       }
       return; 
     } 
@@ -178,7 +178,7 @@
       target.style.visibility = 'hidden';
     }
 
-    if (eachMistakeCount > 15) {
+    if (eachMistakeCount > 9) {
       nextCharHint.style.display = 'none';
     }
     if (loc === word.length) {
