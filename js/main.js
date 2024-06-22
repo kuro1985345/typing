@@ -4,7 +4,8 @@
   let timeLimit = 0;
   let timeRemain = timeLimit;
   let timerInterval;
-  let mistakeCount = 0; //追加
+  let mistakeCount = 0;
+  let eachMistakeCount = 0;
 
   function startTimer() {
     const timerEL = document.getElementById('remain-time');
@@ -15,6 +16,12 @@
       timerEL.textContent = `残り時間：${timeRemain}秒`;
 
       if (timeRemain <= 0) {
+        const reset = document.getElementById('reset');
+        reset.textContent = 'Restart';
+        reset.style.display = 'block';
+        reset.addEventListener('click', () => {
+          resetGame();
+        });
         clearInterval(timerInterval);
         alert("時間切れです！！");
       }
@@ -24,14 +31,22 @@
   function setWord() {
     word = words.splice(Math.floor(Math.random() * words.length), 1)[0];
     target.textContent = word;
+    target.style.visibility = 'visible';
     loc = 0;
+    eachMistakeCount = 0;
+    mistakeDisplay.style.display = 'block';
+
+    eachMistakeDisplay.textContent = `この単語の誤入力回数：${eachMistakeCount}`;
+    nextCharHint.textContent = ''; // Clear next character hint
+    nextCharHint.style.display = 'none';
   }
 
   function resetGame() {
     isPlaying = false;
     // words.splice(0, words.length);
-    // words.push('red', 'blue', 'pink');
+    words.push('red', 'blue', 'pink', 'apple', 'banana', 'orange', 'elephant', 'giraffe', 'rhinoceros');
     words = [];
+    // words = words.concat(wordLists[difficulty]);
     target.textContent = 'Click to start';
     loc = 0;
     startTime = null;
@@ -39,8 +54,11 @@
     easyBtn.style.display = 'inline-block';
   normalBtn.style.display = 'inline-block';
   hardBtn.style.display = 'inline-block';
+  const reset = document.getElementById('reset');
+  reset.style.display = 'none'
     mistakeCount = 0;
     mistakeDisplay.style.display = 'none';
+    score = 0;
   }
 
   let words;
@@ -48,6 +66,7 @@
   let loc = 0;
   let startTime;
   let isPlaying = false;
+  let score = 0;
   const target = document.getElementById('target');
   const easyBtn = document.getElementById('easyBtn');
   const normalBtn = document.getElementById('normalBtn');
@@ -57,6 +76,21 @@
   mistakeDisplay.id = 'mistakeCount'; //追加
   mistakeDisplay.style.display = 'none'; //追加
   document.body.appendChild(mistakeDisplay); //追加
+
+  const eachMistakeDisplay = document.createElement('p');
+  eachMistakeDisplay.id = 'eachMistakeCount';
+  eachMistakeDisplay.style.display = 'none';
+  document.body.appendChild(eachMistakeDisplay);
+
+  const nextCharHint = document.createElement('div');
+  nextCharHint.id = 'nextCharHint';
+  nextCharHint.style.position = 'absolute';
+  nextCharHint.style.top = '10px';
+  nextCharHint.style.right = '10px';
+  nextCharHint.style.fontSize = '12px';
+  nextCharHint.style.color = 'red';
+  nextCharHint.style.display = 'none';
+  document.body.appendChild(nextCharHint);
 
   const wordLists = {
     easy: ['red', 'blue', 'pink'],
@@ -124,21 +158,35 @@
       return;
     }
 
-    if (e.key !== word[loc]) { //追加
-      mistakeCount++; //追加
-      mistakeDisplay.textContent = `誤入力回数: ${mistakeCount}`; //追加
-      return; //追加
-    } //追加
+    if (e.key !== word[loc]) { 
+      mistakeCount++; 
+      eachMistakeCount++;
+      mistakeDisplay.textContent = `誤入力回数: ${mistakeCount}`; 
+      eachMistakeDisplay.textContent = 'この単語の誤入力回数:${eachMistakeCount}';
+      if (mistakeCount > 9) {
+        nextCharHint.textContent = ` ${word[loc]}`;
+        nextCharHint.style.display = 'block';
+        mistakeCount = 0;
+      }
+      return; 
+    } 
 
     loc++;
 
     target.textContent = '_'.repeat(loc) + word.substring(loc);
+    if (loc >= Math.floor(word.length / 2)) {
+      target.style.visibility = 'hidden';
+    }
 
+    if (eachMistakeCount > 15) {
+      nextCharHint.style.display = 'none';
+    }
     if (loc === word.length) {
+      score=score+10
       if (words.length === 0) {
         clearInterval(timerInterval);
         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-        result.textContent = `Finished! ${elapsedTime} seconds!`;
+        result.textContent = `Finished! score ${score+timeRemain-mistakeCount}!`;
         isPlaying = false;
         const reset = document.getElementById('reset');
         reset.textContent = 'Restart';
