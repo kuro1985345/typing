@@ -4,8 +4,9 @@
   let timeLimit = 0;
   let timeRemain = timeLimit;
   let timerInterval;
+  let mistakeCount = 0; //追加
 
-  function startTimer(){
+  function startTimer() {
     const timerEL = document.getElementById('remain-time');
     timerEL.textContent = `残り時間：${timeRemain}秒`;
 
@@ -13,11 +14,11 @@
       timeRemain--;
       timerEL.textContent = `残り時間：${timeRemain}秒`;
 
-      if (timeRemain <= 0){
+      if (timeRemain <= 0) {
         clearInterval(timerInterval);
-        alert("時間切れです！！")
+        alert("時間切れです！！");
       }
-    },1000);
+    }, 1000);
   }
 
   function setWord() {
@@ -47,7 +48,11 @@
   const easyBtn = document.getElementById('easyBtn');
   const normalBtn = document.getElementById('normalBtn');
   const hardBtn = document.getElementById('hardBtn');
-
+  const result = document.getElementById('result');  //追加
+  const mistakeDisplay = document.createElement('p'); //追加
+  mistakeDisplay.id = 'mistakeCount'; //追加
+  mistakeDisplay.style.display = 'none'; //追加
+  document.body.appendChild(mistakeDisplay); //追加
 
   const wordLists = {
     easy: ['red', 'blue', 'pink'],
@@ -66,50 +71,60 @@
 
     timeRemain = timeLimit;
     words = wordLists[difficulty];
-    startGame(); 
+    mistakeCount = 0;  //追加
+    mistakeDisplay.style.display = 'none'; //追加
+    startGame();
   }
 
   function startGame() {
     easyBtn.style.display = 'none';
     normalBtn.style.display = 'none';
     hardBtn.style.display = 'none';
+    result.textContent = '';  //追加
 
     if (isPlaying === true) {
       return;
     }
-  
+
     isPlaying = true;
     let count = 3;
-    const countDown = setInterval(() =>{
-      if (count > 0){
+    const countDown = setInterval(() => {
+      if (count > 0) {
         target.textContent = count;
         count--;
-      }
-      else
-      {
+      } else {
         clearInterval(countDown);
         startTime = Date.now();
         setWord();
         startTimer();
+        mistakeDisplay.textContent = `誤入力回数: ${mistakeCount}`; //追加
+        mistakeDisplay.style.display = 'block'; //追加
       }
-    },1000)
+    }, 1000);
   }
+
   document.getElementById('easyBtn').addEventListener('click', () => {
     selectDifficulty('easy');
   });
-  
+
   document.getElementById('normalBtn').addEventListener('click', () => {
     selectDifficulty('normal');
   });
-  
+
   document.getElementById('hardBtn').addEventListener('click', () => {
     selectDifficulty('hard');
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key !== word[loc]) {
+    if (!isPlaying) {
       return;
     }
+
+    if (e.key !== word[loc]) { //追加
+      mistakeCount++; //追加
+      mistakeDisplay.textContent = `誤入力回数: ${mistakeCount}`; //追加
+      return; //追加
+    } //追加
 
     loc++;
 
@@ -117,9 +132,10 @@
 
     if (loc === word.length) {
       if (words.length === 0) {
+        clearInterval(timerInterval);
         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-        const result = document.getElementById('result');
         result.textContent = `Finished! ${elapsedTime} seconds!`;
+        isPlaying = false;
         const reset = document.getElementById('reset');
         reset.textContent = 'Restart';
         reset.style.display = 'block';
