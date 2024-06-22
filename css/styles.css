@@ -1,7 +1,15 @@
+.header {
+  background-color: beige;
+  background-size: cover;
+  background-position: center;
+  height: 30px;
+}
+
 body {
   padding-top: 40px;
   font-family: 'Courier New', monospace;
   text-align: center;
+  background-color: aquamarine;
 }
 
 #target {
@@ -9,5 +17,5 @@ body {
   letter-spacing: .1em;
 }
 #reset{
-  text-align: center
+  text-align: center;
 }
