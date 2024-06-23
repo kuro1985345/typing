@@ -16,6 +16,7 @@
       timerEL.textContent = `残り時間：${timeRemain}秒`;
 
       if (timeRemain <= 0) {
+        result.textContent = `Finished! score ${score+timeRemain-mistakeCount}!`;
         const reset = document.getElementById('reset');
         reset.textContent = 'Restart';
         reset.style.display = 'block';
@@ -30,8 +31,13 @@
 
   function setWord() {
     word = words.splice(Math.floor(Math.random() * words.length), 1)[0];
-    target.textContent = word;
-    target.style.visibility = 'visible';
+    target.innerHTML = '';
+    for (let i = 0; i < word.length; i++) {
+      const span = document.createElement('span');
+      span.textContent = word[i];
+      span.className = 'char';
+      target.appendChild(span);
+    }
     loc = 0;
     eachMistakeCount = 0;
     mistakeDisplay.style.display = 'block';
@@ -43,7 +49,7 @@
   function resetGame() {
     isPlaying = false;
     // words.splice(0, words.length);
-    words.push('red', 'blue', 'pink', 'apple', 'banana', 'orange', 'elephant', 'giraffe', 'rhinoceros');
+    words.push('old', 'test', 'girl', 'name', 'star', 'steal', 'salt', 'iron', 'zinc', 'lipid', 'shrimp', 'oxygen', 'copper', 'oatmeal', 'dream', 'beast', 'steal', 'foster', 'zinc', 'alone', 'elephant', 'giraffe', 'rhinoceros', 'cucumber', 'illusion', 'enzyme', 'ethanol', 'phosphorus', 'mercury', 'chlorophyll');
     words = [];
     // words = words.concat(wordLists[difficulty]);
     target.textContent = 'Click to start';
@@ -75,6 +81,9 @@
   mistakeDisplay.id = 'mistakeCount'; //追加
   mistakeDisplay.style.display = 'none'; //追加
   document.body.appendChild(mistakeDisplay); //追加
+  // idが "reset" の要素を非表示にする
+document.getElementById('reset').style.display = 'none';
+
 
   const eachMistakeDisplay = document.createElement('p');
   eachMistakeDisplay.id = 'eachMistakeCount';
@@ -92,16 +101,16 @@
   document.body.appendChild(nextCharHint);
 
   const wordLists = {
-    easy: ['red', 'blue', 'pink'],
-    normal: ['apple', 'banana', 'orange'],
-    hard: ['elephant', 'giraffe', 'rhinoceros']
+    easy: ['old', 'test', 'girl', 'name', 'star', 'steal', 'salt', 'iron', 'zinc', 'lipid'],
+    normal: ['shrimp', 'oxygen', 'copper', 'oatmeal', 'dream', 'beast', 'steal', 'foster', 'zinc', 'alone'],
+    hard: ['elephant', 'giraffe', 'rhinoceros', 'cucumber', 'illusion', 'enzyme', 'ethanol', 'phosphorus', 'mercury', 'chlorophyll']
   };
 
   function selectDifficulty(difficulty) {
     if (difficulty === 'easy') {
-      timeLimit = 15;
+      timeLimit = 30;
     } else if (difficulty === 'normal') {
-      timeLimit = 25;
+      timeLimit = 30;
     } else if (difficulty === 'hard') {
       timeLimit = 30;
     }
@@ -159,6 +168,8 @@
       return;
     }
 
+    const charElements = document.querySelectorAll('.char');
+
     if (e.key !== word[loc]) { 
       mistakeCount++; 
       eachMistakeCount++;
@@ -171,11 +182,14 @@
       return; 
     } 
 
+    charElements[loc].textContent = '_';
     loc++;
 
-    target.textContent = '_'.repeat(loc) + word.substring(loc);
+    // target.textContent = '_'.repeat(loc) + word.substring(loc);
     if (loc >= Math.floor(word.length / 2)) {
-      target.style.visibility = 'hidden';
+      for (let i = 0; i < word.length; i++) {
+        charElements[i].classList.add('hidden');
+      }
     }
 
     if (eachMistakeCount > 9) {
@@ -197,6 +211,11 @@
         return;
       }
       setWord();
+    }else{
+      if (eachMistakeCount > 9){
+        nextCharHint.textContent = `${word[loc]}`;
+        nextCharHint.style.display = 'block';
+      }
     }
   });
 }
