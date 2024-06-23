@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ろぐいん</title>
+    <style>body{background-color: aqua;}</style>
+    
+</head>
+<body>
+    <h1>とうろくぺーじ</h1>
+    <form >
+    <p>ユーザー名</p>
+    <input type="text" placeholder="ゆーざーねーむ"  id="user">
+     <!-- <p>確認</p>
+     <input type="text" placeholder="さいかくにん" id="reuser"> -->
+     <button type="button" id="sendbtn">登録</button> 
+    </form>
+    <ul id="icon"></ul>
+    <script>
+        const onClickTouroku = () => {
+            const inpassEL = document.getElementById('user');
+            const inpass = inpassEL.value;
+            inpassEL.value = "";
+        
+            if(inpass === ""){
+                alert("あ、あの、お名前を教えてください");
+                return;
+            }
+           window.location.href = 'index.html';
+ };
+document.getElementById("sendbtn").addEventListener("click",() => onClickTouroku());
+  
+    </script>
+</body>
+</html>
