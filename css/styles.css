@@ -62,3 +62,7 @@ body {
 #reset{
   text-align:center;
 }
+
+#result, #remain-time, #mistakeCount, #eachMistakeCount {
+  color: white;
+}
