@@ -5,11 +5,22 @@
   height: 30px;
 } */
 
+#result, #remain-time, #mistakeCount, #eachMistakeCount {
+  color: red;
+  font-family: "Yuji Boku", serif;
+  font-weight: 400;
+  font-style: normal; 
+}
+
+#result, #remain-time{
+  background-color: #000;
+}
+
 body {
   padding-top: 40px;
   font-family: 'Courier New', monospace;
   text-align: center;
-  background-color: purple;
+  background-image: url(haikei1.png);
 }
 
 .char {
@@ -61,8 +72,4 @@ body {
 }
 #reset{
   text-align:center;
-}
-
-#result, #remain-time, #mistakeCount, #eachMistakeCount {
-  color: white;
 }
