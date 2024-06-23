@@ -13,12 +13,14 @@
   </header> -->
   <p id="target">Click to start!</p>
   <p id="result"></p>
+  <p id="user-name"></p>
   <div id = "remain-time"></div>
   <button id="easyBtn">Easy</button>
   <button id="normalBtn">Normal</button>
   <button id="hardBtn">Hard</button>
   <p><br></p>
   <button id="reset" class = "btnR">Restart</button>
+  <script src="js/main.js"></script>
   <script>
     function getQueryParams() {
       const params = {};
@@ -34,8 +36,7 @@
   // クエリパラメータからユーザー名を取得して表示
   const params = getQueryParams();
   const userName = params['name'];
-  document.getElementById('user-name').textContent = userName ? `こんにちは、${userName}さん！` : 'ゲスト状態です。';
+  document.getElementById('user-name').textContent = userName ? `こんにちは、${userName}さん！` : 'ゲスト状態です。'; 
   </script>
-  <script src="js/main.js"></script>
 </body>
 </html>
