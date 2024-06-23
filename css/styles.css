@@ -1,21 +1,64 @@
-.header {
+/* .header {
   background-color: beige;
   background-size: cover;
   background-position: center;
   height: 30px;
-}
+} */
 
 body {
   padding-top: 40px;
   font-family: 'Courier New', monospace;
   text-align: center;
-  background-color: aquamarine;
+  background-color: purple;
+}
+
+.char {
+  display: inline-block;
+  border: 1px solid white;
+  padding: 2px;
+  margin: 1px;
+}
+
+.hidden {
+  color:transparent;
+}
+
+.btn {
+  display: inline-block;
+  font-size: 1.5rem;
+  background-color: #0bd;
+  color: #fff;
+  border-radius: 8px;
+  padding: .75rem 1.5rem;
+  margin: .4rem;
+  transition: .5s;
+}
+.btn:hover {
+  background-color: #0090aa;
+  scale: 1.2;
+}
+
+.btnR{
+  display: inline-block;
+  font-size: 1.5rem;
+  background-color: rgb(255, 0, 0);
+  color: #000;
+  border-radius: 8px;
+  padding: .75rem 1.5rem;
+  margin: .4rem;
+  transition: .5s;
+}
+
+.btnR:hover{
+  background-color: rgb(220, 0, 0);
+  scale:1.2;
 }
 
 #target {
   font-size: 48px;
   letter-spacing: .1em;
+  color:#fff;
 }
 #reset{
-  text-align: center;
+  text-align:center;
 }
