@@ -1,0 +1,10 @@
+body {
+  padding-top: 40px;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  background-image: url(haikei2.png);
+}
+
+h1 {
+  color: white;
+}
